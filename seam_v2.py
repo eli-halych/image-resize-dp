@@ -72,29 +72,26 @@ def compute_vertical_seam_v2(energy_data):
     for y in range(1, h):
         for x in range(w):
             x_min = x - 1 if x > 0 else 0
-            x_max = x + 1 if x < w-1 else w-1
+            x_max = x + 1 if x < w - 1 else w - 1
 
+            # before in seam_v1 we were getting the min energy
+            # here we sort by the energy to get the previous row x_coordinate
             min_x_parent = min(
-                m_grid[y - 1][x_candidate].energy
-                for x_candidate in range(x_min, x_max + 1)
+                range(x_min, x_max + 1),
+                key=lambda x_candidate: m_grid[y - 1][x_candidate].energy
             )
-
-            print(x, y)
 
             m_grid[y][x] = SeamEnergyWithBackPointer(
                 energy_data[y][x] + m_grid[y - 1][min_x_parent].energy,
                 min_x_parent
             )
 
-    min_end_x = min(
-        enumerate(m_grid[h - 1]),
-        key=lambda m: m[1].energy
-    )[0]
+    min_end_x = min(enumerate(m_grid[h - 1]), key=lambda m: m[1].energy)[0]
     seam_energy = m_grid[-1][min_end_x].energy
 
     seam_xs = []
     last_x = min_end_x
-    for y in range(h-1, -1, -1):
+    for y in range(h - 1, -1, -1):
         seam_xs.append(last_x)
         last_x = m_grid[y][last_x].x_coordinate_prev_row
 
