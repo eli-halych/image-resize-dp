@@ -34,7 +34,30 @@ def compute_vertical_seam_v1(energy_data):
       2. The total energy of that seam.
     """
 
-    raise NotImplementedError('compute_vertical_seam_v1 is not implemented')
+    m_grid = [[0 for _ in row] for row in energy_data]
+
+    h = len(energy_data)
+    w = len(energy_data[0])
+
+    for y in range(h):
+        for x in range(w):
+            x_min = x - 1 if x > 0 else 0
+            x_max = x + 1 if x < w-1 else w-1
+
+            min_parent_energy = min(
+                m_grid[y - 1][x_candidate]
+                for x_candidate in range(x_min, x_max + 1)
+            )
+
+            m_grid[y][x] = energy_data[y][x] + min_parent_energy
+
+            min_end_x, min_seam_energy = min(
+                enumerate(m_grid[h - 1]),
+                key=lambda m: m[1]
+            )
+
+
+    return (min_end_x, min_seam_energy)
 
 
 def visualize_seam_end_on_image(pixels, end_x):
