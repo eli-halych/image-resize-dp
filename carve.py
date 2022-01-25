@@ -29,7 +29,16 @@ def remove_seam_from_image(image, seam_xs):
     one element in each row, but will have the same number of rows.
     """
 
-    raise NotImplementedError('remove_seam_from_image is not implemented')
+    new_image = [
+        [
+            pixel
+            for x, pixel in enumerate(row)
+            if x != seam_xs[y]
+        ]
+        for (y, row) in enumerate(image)
+    ]
+
+    return new_image
 
 
 def remove_n_lowest_seams_from_image(image, num_seams_to_remove):
@@ -53,8 +62,14 @@ def remove_n_lowest_seams_from_image(image, num_seams_to_remove):
     rows.
     """
 
-    raise NotImplementedError(
-        'remove_n_lowest_seams_from_image is not implemented')
+    for i in range(num_seams_to_remove):
+        energy_data = compute_energy(image)
+        seam_xs, _ = compute_vertical_seam_v2(energy_data)
+        visualized_pixels = visualize_seam_on_image(image, seam_xs)
+        write_array_into_image(visualized_pixels, f'intermediate-{1}.png')
+        image = remove_seam_from_image(image, seam_xs)
+
+    return image
 
 if __name__ == '__main__':
     if len(sys.argv) != 4:
