@@ -26,9 +26,33 @@ def energy_at(pixels, x, y):
 
     This is one of the functions you will need to implement. Expected return
     value: a single number representing the energy at that point.
+
+
+    delta_x - moving horizontally along row values
+    delta_y - moving vertically along rows
+
+    x - index in a row
+    y - index in a column
     """
 
-    raise NotImplementedError('energy_at is not implemented')
+    h = len(pixels)
+    w = len(pixels[0])
+
+    left = x - 1 if x > 0 else x
+    right = x + 1 if x < w-1 else x
+    up = y - 1 if y > 0 else y
+    down = y + 1 if y < h-1 else y
+
+
+    delta_x = abs(pixels[y][right].r - pixels[y][left].r)**2 + \
+              abs(pixels[y][right].g - pixels[y][left].g)**2 + \
+               abs(pixels[y][right].b - pixels[y][left].b)**2
+
+    delta_y = abs(pixels[down][x].r - pixels[up][x].r)**2 + \
+              abs(pixels[down][x].g - pixels[up][x].g)**2 + \
+              abs(pixels[down][x].b - pixels[up][x].b)**2
+
+    return delta_x + delta_y
 
 def compute_energy(pixels):
     """
@@ -43,7 +67,16 @@ def compute_energy(pixels):
     value: the 2D grid of energy values.
     """
 
-    raise NotImplementedError('compute_energy is not implemented')
+    rows = len(pixels)
+    columns = len(pixels[0])
+
+    energy = [[0 for _ in row] for row in pixels]
+
+    for y in range(rows):
+        for x in range(columns):
+            energy[y][x] = energy_at(pixels, x, y)
+
+    return energy
 
 
 def energy_data_to_colors(energy_data):
