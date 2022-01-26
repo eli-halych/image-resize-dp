@@ -20,7 +20,7 @@ python carve.py [INPUT_IMAGE] [NUMBER_SEAMS_TO_REMOVE] [OUTPUT_IMAGE]
 What is used
 -------------
 
-Python, Algebra, Probabilities
+Python, Algebra
 
 Program-related knowledge
 --------------------------
